@@ -1,12 +1,15 @@
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore'
+import { format } from 'date-fns'
+import ptBR from 'date-fns/locale/pt-BR'
 
 export function dateFormat(timestamp: FirebaseFirestoreTypes.Timestamp) {
     if (timestamp) {
         const date = new Date(timestamp.toDate())
 
-        const day = date.toLocaleDateString('pt-BR')
-        const hour = date.toLocaleTimeString('pt-BR')
+        const dateFormatted = format(date, "dd'/'MM'/'yyyy' • 'HH':'mm", {
+            locale: ptBR,
+        })
 
-        return `${day} às ${hour}`
+        return dateFormatted
     }
 }
