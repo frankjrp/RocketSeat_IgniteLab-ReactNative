@@ -10,6 +10,8 @@ import { THEME } from '../styles/theme'
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
 
+import Toast from 'react-native-toast-message'
+
 export function SignIn() {
     const [isLoading, setIsLoading] = useState(false)
     const [email, setEmail] = useState("")
@@ -19,7 +21,11 @@ export function SignIn() {
 
     function handleSignIn() {
         if (!email || !password) {
-            return Alert.alert('Entrar', 'Informe e-mail e senha.')
+            return Toast.show({
+                type: 'error',
+                text1: 'Entrar',
+                text2: 'Informe e-mail e senha.'
+            })
         }
 
         setIsLoading(true)

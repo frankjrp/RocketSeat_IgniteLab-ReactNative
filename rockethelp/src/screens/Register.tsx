@@ -3,6 +3,7 @@ import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, Ale
 import { VStack } from 'native-base';
 import { useNavigation } from '@react-navigation/native'
 import firestore from '@react-native-firebase/firestore'
+import Toast from 'react-native-toast-message'
 
 import { Header } from '../components/Header'
 import { Input } from '../components/Input'
@@ -19,7 +20,11 @@ export function Register() {
 
     function handleNewOrderRegister() {
         if (!patrimony || !description) {
-            return Alert.alert('Registrar', 'Preencha todos os campos.')
+            return Toast.show({
+                type: 'error',
+                text1: 'Registrar',
+                text2: 'Preencha todos os campos.'
+            });
         }
 
         setIsLoading(true)
@@ -33,7 +38,10 @@ export function Register() {
                 created_at: firestore.FieldValue.serverTimestamp()
             })
             .then(() => {
-                Alert.alert('Solicitação', 'Solicitação registrada com sucesso.')
+                Toast.show({
+                    type: 'success',
+                    text1: 'Solicitação registrada com sucesso.',
+                });
                 navigation.goBack()
             })
             .catch((error) => {

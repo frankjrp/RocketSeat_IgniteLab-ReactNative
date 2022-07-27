@@ -6,6 +6,7 @@ import firestore from '@react-native-firebase/firestore'
 import { OrderFirestoreDTO } from '../DTOs/OrderFirestoreDTO';
 import { CircleWavyCheck, Hourglass, DesktopTower, Clipboard } from 'phosphor-react-native'
 
+import Toast from 'react-native-toast-message'
 import { dateFormat } from '../utils/firestoreDateFormat';
 
 import { Input } from '../components/Input'
@@ -50,7 +51,10 @@ export function Details() {
                 closed_at: firestore.FieldValue.serverTimestamp()
             })
             .then(() => {
-                Alert.alert('Solicitação', 'Solicitação encerrada!')
+                Toast.show({
+                    type: 'success',
+                    text1: 'Solicitação encerrada com sucesso.',
+                });
                 navigation.goBack()
             })
             .catch((error) => {
