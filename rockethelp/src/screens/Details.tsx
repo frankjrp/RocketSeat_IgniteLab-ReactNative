@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Alert } from 'react-native';
-import { VStack, Text, HStack, useTheme, ScrollView, Box } from 'native-base';
+import { VStack, Text, HStack, useTheme, ScrollView, Box, IconButton } from 'native-base';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import firestore from '@react-native-firebase/firestore'
 import { OrderFirestoreDTO } from '../DTOs/OrderFirestoreDTO';
-import { CircleWavyCheck, Hourglass, DesktopTower, Clipboard } from 'phosphor-react-native'
+import { CircleWavyCheck, Hourglass, DesktopTower, Clipboard, Trash } from 'phosphor-react-native'
 
 import Toast from 'react-native-toast-message'
 import { dateFormat } from '../utils/firestoreDateFormat';
@@ -39,7 +39,7 @@ export function Details() {
 
     function handleOrderClose() {
         if (!solution) {
-            return Alert.alert('Solicitação', 'Informe a solução para encerrar a solicitação.')
+            return Alert.alert('Encerrar', 'Informe a solução antes de encerrar.')
         }
 
         firestore()
@@ -61,6 +61,74 @@ export function Details() {
                 console.log(error)
                 Alert.alert('Solicitação', 'Não foi possível encerrar a solicitação.')
             })
+    }
+
+    function handleOrderReopen() {
+        Alert.alert(
+            "Reabrir",
+            "Confirma a reabertura da solicitação?",
+            [
+                {
+                    text: "Cancelar",
+                    style: "cancel"
+                },
+                {
+                    text: "Sim", onPress: () => {
+                        firestore()
+                            .collection<OrderFirestoreDTO>('orders')
+                            .doc(order.id)
+                            .update({
+                                status: 'open',
+                                solution: '',
+                                closed_at: null
+                            })
+                            .then(() => {
+                                Toast.show({
+                                    type: 'success',
+                                    text1: 'Solicitação reaberta com sucesso.',
+                                });
+                                navigation.goBack()
+                            })
+                            .catch((error) => {
+                                console.log(error)
+                                Alert.alert('Solicitação', 'Não foi possível reabrir a solicitação.')
+                            })
+                    }
+                }
+            ]
+        );
+    }
+
+    function handleOrderDelete() {
+        Alert.alert(
+            "Excluir",
+            "Confirma a exclusão da solicitação?",
+            [
+                {
+                    text: "Cancelar",
+                    style: "cancel"
+                },
+                {
+                    text: "Excluir", onPress: () => {
+                        firestore()
+                            .collection<OrderFirestoreDTO>('orders')
+                            .doc(order.id)
+                            .delete()
+                            .then(() => {
+                                Toast.show({
+                                    type: 'success',
+                                    text1: 'Solicitação excluida com sucesso.',
+                                });
+                                navigation.goBack()
+                            })
+                            .catch((error) => {
+                                console.log(error)
+                                Alert.alert('Solicitação', 'Não foi possível excluir a solicitação.')
+                            })
+                    }
+                }
+            ]
+        );
     }
 
     useEffect(() => {
@@ -148,15 +216,33 @@ export function Details() {
                     }
                 </CardDetails>
             </ScrollView>
-            {
-                order.status === 'open' &&
-                <Button
-                    title='Encerrar solicitação'
-                    m={5}
-                    mb={2}
-                    onPress={handleOrderClose}
+
+            <HStack space={20} mt={10} mb={2} mx={5}>
+                <IconButton
+                    icon={<Trash size={26} color={colors.white} />}
+                    rounded='sm'
+                    variant='solid'
+                    bg='red.900'
+                    px={3}
+                    _pressed={{ bg: 'red.500' }}
+                    onPress={handleOrderDelete}
                 />
-            }
+
+                {
+                    order.status === 'open' ?
+                        <Button
+                            title='Encerrar'
+                            flex={1}
+                            onPress={handleOrderClose}
+                        />
+                        :
+                        <Button
+                            title='Reabrir'
+                            flex={1}
+                            onPress={handleOrderReopen}
+                        />
+                }
+            </HStack>
         </VStack>
     );
 }

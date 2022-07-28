@@ -55,5 +55,11 @@ Projeto criado com Expo. Veja a [documentação oficial](https://docs.expo.dev/g
 - [Expo](https://docs.expo.dev)
 - [Firebase](https://firebase.google.com/docs)
 
+### 🚀 Implementações realizadas por mim
+
+- Utilização da biblioteca [date-fns](https://date-fns.org/) para formatar a exibição das datas e horários
+- Utilização da biblioteca [react-native-toast-message](https://www.npmjs.com/package/react-native-toast-message) para exibir avisos
+- Possibilidade de reabrir e excluir uma solicitação
+
 ## 📄 Protótipo
 - [Figma](https://www.figma.com/file/hBvQxaEdnjKJspMGA0SfYS/Rocket-Help---Evento-Ignite-Lab-%7C-React-Native?node-id=37%3A6)
