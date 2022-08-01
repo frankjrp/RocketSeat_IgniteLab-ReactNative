@@ -84,7 +84,9 @@ export function SignIn() {
 
                     <Button
                         title="Entrar"
+                        h={14}
                         w="full"
+                        rounded='sm'
                         onPress={handleSignIn}
                         isLoading={isLoading}
                     />

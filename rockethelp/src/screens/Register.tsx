@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, Alert } from 'react-native';
-import { VStack } from 'native-base';
+import { Center, VStack } from 'native-base';
 import { useNavigation } from '@react-navigation/native'
 import firestore from '@react-native-firebase/firestore'
 import Toast from 'react-native-toast-message'
@@ -76,12 +76,14 @@ export function Register() {
                         onChangeText={setDescription}
                     />
 
-                    <Button
-                        title='Cadastrar'
-                        mt={5}
-                        isLoading={isLoading}
-                        onPress={handleNewOrderRegister}
-                    />
+                    <Center>
+                        <Button
+                            title='Cadastrar'
+                            mt={5}
+                            isLoading={isLoading}
+                            onPress={handleNewOrderRegister}
+                        />
+                    </Center>
                 </VStack>
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>

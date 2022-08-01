@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react'
 import { Alert } from 'react-native'
 import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore'
-import { useNavigation } from '@react-navigation/native'
-import { HStack, IconButton, VStack, useTheme, Text, Heading, FlatList, Center } from 'native-base';
-import { SignOut } from 'phosphor-react-native'
+import { useNavigation, useIsFocused } from '@react-navigation/native'
+import { HStack, IconButton, VStack, useTheme, Text, Heading, FlatList, Center, Icon } from 'native-base';
+import { Plus, SignOut } from 'phosphor-react-native'
 import { ChatTeardropText } from 'phosphor-react-native'
 
 import { dateFormat } from '../utils/firestoreDateFormat'
@@ -12,7 +12,7 @@ import { dateFormat } from '../utils/firestoreDateFormat'
 import Logo from '../assets/logo_secondary.svg'
 
 import { Filter } from '../components/Filter'
-import { Button } from '../components/Button'
+import { AddFabButton } from '../components/AddFabButton'
 import { Loading } from '../components/Loading'
 import { Order, OrderProps } from '../components/Order'
 
@@ -23,6 +23,8 @@ export function Home() {
     const [orders, setOrders] = useState<OrderProps[]>([])
 
     const navigation = useNavigation()
+    const isFocused = useIsFocused();
+
     const { colors } = useTheme()
 
     function handleNewOrder() {
@@ -150,7 +152,7 @@ export function Home() {
                         />
                 }
 
-                <Button title="Nova solicitação" mt={3} onPress={handleNewOrder} />
+                {isFocused ? <AddFabButton icon={<Icon as={<Plus color="white" />} />} onPress={handleNewOrder} /> : null}
             </VStack>
         </VStack>
     );

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Alert } from 'react-native';
-import { VStack, Text, HStack, useTheme, ScrollView, Box, IconButton } from 'native-base';
+import { VStack, Text, HStack, useTheme, ScrollView, Box, Center } from 'native-base';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import firestore from '@react-native-firebase/firestore'
 import { OrderFirestoreDTO } from '../DTOs/OrderFirestoreDTO';
-import { CircleWavyCheck, Hourglass, DesktopTower, Clipboard, Trash } from 'phosphor-react-native'
+import { CircleWavyCheck, Hourglass, DesktopTower, Clipboard } from 'phosphor-react-native'
 
 import Toast from 'react-native-toast-message'
 import { dateFormat } from '../utils/firestoreDateFormat';
@@ -73,7 +73,7 @@ export function Details() {
                     style: "cancel"
                 },
                 {
-                    text: "Sim", onPress: () => {
+                    text: "Reabrir", onPress: () => {
                         firestore()
                             .collection<OrderFirestoreDTO>('orders')
                             .doc(order.id)
@@ -162,8 +162,8 @@ export function Details() {
 
     return (
         <VStack flex={1} bg="gray.700">
-            <Box px={6} bg="gray.600" borderBottomWidth={1} borderBottomColor={order.status === 'closed' ? colors.green[300] : colors.secondary[700]}>
-                <Header title='Solicitação' />
+            <Box bg="gray.600" borderBottomWidth={1} borderBottomColor={order.status === 'closed' ? colors.green[300] : colors.secondary[700]}>
+                <Header title='Solicitação' showTrashIcon onTrashPress={handleOrderDelete} />
             </Box>
 
             <HStack bg="gray.500" justifyContent="center" p={4}>
@@ -217,32 +217,20 @@ export function Details() {
                 </CardDetails>
             </ScrollView>
 
-            <HStack space={20} mt={10} mb={2} mx={5}>
-                <IconButton
-                    icon={<Trash size={26} color={colors.white} />}
-                    rounded='sm'
-                    variant='solid'
-                    bg='red.900'
-                    px={3}
-                    _pressed={{ bg: 'red.500' }}
-                    onPress={handleOrderDelete}
-                />
-
+            <Center mt={10} mb={2} mx={5}>
                 {
                     order.status === 'open' ?
                         <Button
                             title='Encerrar'
-                            flex={1}
                             onPress={handleOrderClose}
                         />
                         :
                         <Button
                             title='Reabrir'
-                            flex={1}
                             onPress={handleOrderReopen}
                         />
                 }
-            </HStack>
+            </Center>
         </VStack>
     );
 }
